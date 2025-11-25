@@ -22,7 +22,40 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-/* Button: Neue Reise */
+/* Login-Bildschirm */
+#loginScreen {
+  text-align: center;
+}
+
+#loginScreen h1 {
+  color: #5a7d4a;
+  margin-bottom: 10px;
+}
+
+#loginScreen input {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+#loginScreen button {
+  background: #5a7d4a;
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+#loginScreen button:hover {
+  background: #4a653d;
+}
+
+/* Button: Neue Reise (in der Ecke) */
 .new-reise-button {
   position: absolute;
   top: 20px;
@@ -88,7 +121,7 @@ button:hover {
   margin-top: 20px;
 }
 
-/* Berichte */
+/* Berichte (Titel über dem Bericht) */
 #entries {
   margin-top: 30px;
 }
@@ -104,12 +137,24 @@ button:hover {
 .entry h3 {
   color: #5a7d4a;
   margin-bottom: 5px;
+  font-size: 1.2em;
 }
 
 .entry p {
   margin-bottom: 10px;
+  font-size: 1em;
 }
 
 .entry img {
   max-width: 100%;
-  height
+  height: auto;
+  border-radius: 6px;
+  margin-top: 10px;
+}
+
+.entry .location {
+  font-style: italic;
+  color: #666;
+  margin-top: 5px;
+  font-size: 0.9em;
+}
