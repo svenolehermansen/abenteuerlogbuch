@@ -1,3 +1,4 @@
+/* Globale Stile */
 * {
   margin: 0;
   padding: 0;
@@ -21,18 +22,30 @@ body {
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
 }
 
-h1 {
-  text-align: center;
-  color: #5a7d4a;
-  margin-bottom: 10px;
+/* Button: Neue Reise */
+.new-reise-button {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  z-index: 100;
 }
 
-p {
-  text-align: center;
-  color: #666;
-  margin-bottom: 30px;
+.new-reise-button button {
+  background: #5a7d4a;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s;
 }
 
+.new-reise-button button:hover {
+  background: #4a653d;
+}
+
+/* Formular */
 .form-group {
   margin-bottom: 15px;
 }
@@ -69,11 +82,13 @@ button:hover {
   background: #4a653d;
 }
 
+/* Karte */
 #map {
   border-radius: 8px;
-  margin-top: 10px;
+  margin-top: 20px;
 }
 
+/* Berichte */
 #entries {
   margin-top: 30px;
 }
@@ -97,13 +112,4 @@ button:hover {
 
 .entry img {
   max-width: 100%;
-  height: auto;
-  border-radius: 6px;
-  margin-top: 10px;
-}
-
-.entry .location {
-  font-style: italic;
-  color: #666;
-  margin-top: 5px;
-}
+  height
