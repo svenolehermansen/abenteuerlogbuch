@@ -48,8 +48,8 @@ document.addEventListener("DOMContentLoaded", async () => {
       loginScreen.style.display = "none";
       mainScreen.style.display = "block";
       error.style.display = "none";
-      localStorage.setItem("isLoggedIn", "true"); // ✅ Sicher speichern
-      neueReiseForm.style.display = "block"; // ✅ Zeige Formular
+      localStorage.setItem("isLoggedIn", "true");
+      neueReiseForm.style.display = "block";
       alert("Willkommen im Abenteuer-Logbuch!");
     } else {
       error.style.display = "block";
@@ -58,7 +58,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   });
 
   // Neue Reise erstellen
-  document.getElementById("neueReiseButton").addEventListener("click", () => {
+  document.getElementById("neueReiseButton").addEventListener("click", (e) => {
+    e.preventDefault();
     const name = document.getElementById("neueReiseName").value;
     const start = document.getElementById("neueReiseStart").value;
     const end = document.getElementById("neueReiseEnde").value;
@@ -86,6 +87,45 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("neueReiseEnde").value = "";
   });
 
+  // Formular-Submit
+  document.getElementById("logForm").addEventListener("submit", (e) => {
+    e.preventDefault();
+
+    const date = document.getElementById("date").value;
+    const title = document.getElementById("title").value;
+    const location = document.getElementById("location").value;
+    const lat = document.getElementById("lat").value;
+    const lon = document.getElementById("lon").value;
+    const text = document.getElementById("text").value;
+    const photoInput = document.getElementById("photo");
+    const photoFile = photoInput.files[0];
+
+    // Erstelle Bericht
+    const logEntry = {
+      date,
+      title,
+      location,
+      lat: lat || null,
+      lon: lon || null,
+      text,
+      photo: photoFile ? photoFile.name : null
+    };
+
+    // Speichere lokal
+    saveLogLocally(logEntry);
+
+    // Lade Foto hoch (falls vorhanden)
+    if (photoFile) {
+      uploadPhotoToOneDrive(photoFile, date);
+    }
+
+    // Rückmeldung
+    alert("Eintrag erfolgreich gespeichert und hochgeladen!");
+
+    // Leere Formular
+    document.getElementById("logForm").reset();
+  });
+
   // Lade Einträge
   renderEntries();
 
@@ -104,6 +144,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 });
+
 // Fülle Reise-Auswahl
 function populateReiseSelect() {
   const select = document.getElementById("reise");
@@ -211,7 +252,7 @@ function renderEntries() {
     }
 
     div.innerHTML = `
-      <h3>${entry.date} – ${entry.location}</h3>
+      <h3>${entry.date} – ${entry.title}</h3>
       <p>${entry.text}</p>
       ${entry.photo ? `<img src="https://graph.microsoft.com/v1.0/me/drive/root:/${encodeURIComponent(`Abenteuer-Logbuch/photos/${entry.photo}`)}" alt="Foto" />` : ''}
       <div class="location">${locationText}</div>
