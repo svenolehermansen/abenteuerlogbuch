@@ -1,1 +1,61 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Abenteuer-Logbuch</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>📝 Abenteuer-Logbuch</h1>
+    <p>Teile deine Erlebnisse mit der Familie – jederzeit, überall.</p>
 
+    <!-- Formular -->
+    <form id="logForm">
+      <div class="form-group">
+        <label for="date">Datum:</label>
+        <input type="date" id="date" required />
+      </div>
+
+      <div class="form-group">
+        <label for="location">Ort:</label>
+        <input type="text" id="location" placeholder="z. B. Bodensee, Deutschland" required />
+      </div>
+
+      <div class="form-group">
+        <label for="lat">Latitude (optional):</label>
+        <input type="text" id="lat" placeholder="z. B. 47.3769" />
+      </div>
+
+      <div class="form-group">
+        <label for="lon">Longitude (optional):</label>
+        <input type="text" id="lon" placeholder="z. B. 8.5417" />
+      </div>
+
+      <div class="form-group">
+        <label for="text">Bericht:</label>
+        <textarea id="text" rows="5" placeholder="Was war heute besonders?" required></textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="photo">Foto hochladen:</label>
+        <input type="file" id="photo" accept="image/*" />
+      </div>
+
+      <button type="submit">Eintrag speichern & hochladen</button>
+    </form>
+
+    <!-- Karte -->
+    <div id="map" style="height: 300px; margin-top: 20px;"></div>
+
+    <!-- Berichte -->
+    <h2>📅 Letzte Einträge</h2>
+    <div id="entries"></div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
