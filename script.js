@@ -4,53 +4,43 @@ const correctPassword = "FamilienGeheimnis2025"; // ← ÄNDERE DIES! (z. B. "
 // Reise-Objekt
 let reisen = [];
 
-// Globale Karte
-let map = null;
+// Globale Variablen
+const correctPassword = "FamilienGeheimnis2025"; // ← ÄNDERE DIES! (z. B. "Abenteuer2025")
 
 // Initialisierung
-document.addEventListener("DOMContentLoaded", async () => {
+document.addEventListener("DOMContentLoaded", () => {
   const loginScreen = document.getElementById("loginScreen");
   const mainScreen = document.getElementById("mainScreen");
   const loginForm = document.getElementById("loginForm");
   const error = document.getElementById("error");
-  const reiseSelect = document.getElementById("reise");
-  const neueReiseForm = document.getElementById("neueReiseForm");
+  const passwordInput = document.getElementById("password");
+  const neueReiseButtonContainer = document.getElementById("neueReiseButtonContainer");
 
   // Prüfe, ob bereits eingeloggt
-  const isLoggedIn = localStorage.getItem("isLoggedIn");
-  if (isLoggedIn === "true") {
+  if (localStorage.getItem("isLoggedIn") === "true") {
     loginScreen.style.display = "none";
     mainScreen.style.display = "block";
-    neueReiseForm.style.display = "block";
-  }
-
-  // Lade Reisen
-  try {
-    const response = await fetch("reisen.json");
-    reisen = await response.json();
-    reisen = reisen.reisen;
-    populateReiseSelect();
-  } catch (e) {
-    console.error("Fehler beim Laden der Reisen:", e);
+    neueReiseButtonContainer.style.display = "block";
   }
 
   // Passwort-Formular
   loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const password = document.getElementById("password").value;
+    const password = passwordInput.value;
 
     if (password === correctPassword) {
       loginScreen.style.display = "none";
       mainScreen.style.display = "block";
       error.style.display = "none";
       localStorage.setItem("isLoggedIn", "true");
-      neueReiseForm.style.display = "block";
+      neueReiseButtonContainer.style.display = "block";
       alert("Willkommen im Abenteuer-Logbuch!");
     } else {
       error.style.display = "block";
-      document.getElementById("password").value = "";
+      passwordInput.value = "";
     }
   });
+});
 // Neue Reise erstellen
 document.getElementById("neueReiseButton").addEventListener("click", async (e) => {
   e.preventDefault();
