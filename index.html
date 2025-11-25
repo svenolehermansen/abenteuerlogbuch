@@ -20,9 +20,16 @@
   </div>
 
   <div class="container" id="mainScreen" style="display: none;">
-    <!-- Hier kommt dein ursprünglicher Inhalt -->
     <h1>📝 Abenteuer-Logbuch</h1>
     <p>Teile deine Erlebnisse mit der Familie – jederzeit, überall.</p>
+
+    <!-- Reise-Auswahl -->
+    <div class="form-group">
+      <label for="reise">Aktuelle Reise:</label>
+      <select id="reise">
+        <option value="">Keine Reise ausgewählt</option>
+      </select>
+    </div>
 
     <!-- Formular -->
     <form id="logForm">
@@ -62,12 +69,17 @@
     <!-- Karte -->
     <div id="map" style="height: 300px; margin-top: 20px;"></div>
 
+    <!-- Reise-Übersicht -->
+    <h2>📅 Reise-Übersicht</h2>
+    <div id="reiseInfo">
+      <p>Keine Reise ausgewählt.</p>
+    </div>
+
     <!-- Berichte -->
     <h2>📅 Letzte Einträge</h2>
     <div id="entries"></div>
   </div>
 
-  <!-- JavaScript-Datei am Ende des Body -->
   <script src="script.js"></script>
 </body>
 </html>
