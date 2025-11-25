@@ -166,23 +166,6 @@ function populateReiseSelect() {
   });
 }
 
-// Zeige Reise-Info
-function showReiseInfo(reise) {
-  const infoDiv = document.getElementById("reiseInfo");
-  const start = new Date(reise.start).toLocaleDateString("de-DE");
-  const end = new Date(reise.end).toLocaleDateString("de-DE");
-  const days = Math.ceil((new Date(reise.end) - new Date(reise.start)) / (1000 * 60 * 60 * 24));
-
-  infoDiv.innerHTML = `
-    <h3>${reise.name}</h3>
-    <p><strong>Start:</strong> ${start}</p>
-    <p><strong>Ende:</strong> ${end}</p>
-    <p><strong>Dauer:</strong> ${days} Tage</p>
-    <p><strong>Ort:</strong> ${reise.ort}</p>
-    <p><strong>Beschreibung:</strong> ${reise.beschreibung}</p>
-  `;
-}
-
 // Zeige den „Neue Reise“-Button erst nach Login
 const neueReiseButtonContainer = document.getElementById("neueReiseButtonContainer");
 const loginScreen = document.getElementById("loginScreen");
@@ -191,6 +174,8 @@ const mainScreen = document.getElementById("mainScreen");
 // Wenn du eingeloggt bist → zeige den Button
 if (localStorage.getItem("isLoggedIn") === "true") {
   neueReiseButtonContainer.style.display = "block";
+} else {
+  neueReiseButtonContainer.style.display = "none";
 }
 
 // Wenn du eingeloggt bist → zeige den Button
