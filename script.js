@@ -54,3 +54,32 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 });
+
+// Neue Reise erstellen
+document.getElementById("neueReiseButton").addEventListener("click", () => {
+  const name = document.getElementById("neueReiseName").value;
+  const start = document.getElementById("neueReiseStart").value;
+  const end = document.getElementById("neueReiseEnde").value;
+
+  if (!name || !start || !end) {
+    alert("Bitte alle Felder ausfüllen!");
+    return;
+  }
+
+  const neueReise = {
+    name,
+    start,
+    end,
+    ort: "Unbekannt",
+    beschreibung: "Neue Reise",
+    punkte: []
+  };
+
+  reisen.push(neueReise);
+  localStorage.setItem("reisen", JSON.stringify(reisen));
+  populateReiseSelect();
+  alert("Reise erfolgreich erstellt!");
+  document.getElementById("neueReiseName").value = "";
+  document.getElementById("neueReiseStart").value = "";
+  document.getElementById("neueReiseEnde").value = "";
+});
