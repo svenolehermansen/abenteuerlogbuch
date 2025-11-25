@@ -1,8 +1,7 @@
-// Reise-Objekt
-let reisen = [];
-
 // Globale Variablen
-const correctPassword = "FamilienGeheimnis2025"; // ← ÄNDERE DIES! (z. B. "Abenteuer2025")
+const correctPassword = "FamilienGeheimnis2025"; // ÄNDERE DIES! (z. B. "Abenteuer2025")
+let reisen = [];
+let map = null;
 
 // Initialisierung
 document.addEventListener("DOMContentLoaded", () => {
@@ -12,12 +11,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const error = document.getElementById("error");
   const passwordInput = document.getElementById("password");
   const neueReiseButtonContainer = document.getElementById("neueReiseButtonContainer");
+  const reiseSelect = document.getElementById("reise");
+  const logForm = document.getElementById("logForm");
 
   // Prüfe, ob bereits eingeloggt
   if (localStorage.getItem("isLoggedIn") === "true") {
     loginScreen.style.display = "none";
     mainScreen.style.display = "block";
     neueReiseButtonContainer.style.display = "block";
+  }
+
+  // Lade Reisen
+  try {
+    const response = await fetch("reisen.json");
+    reisen = await response.json();
+    reisen = reisen.reisen;
+    populateReiseSelect();
+  } catch (e) {
+    console.error("Fehler beim Laden der Reisen:", e);
   }
 
   // Passwort-Formular
@@ -37,71 +48,49 @@ document.addEventListener("DOMContentLoaded", () => {
       passwordInput.value = "";
     }
   });
-});
-// Neue Reise erstellen
-document.getElementById("neueReiseButton").addEventListener("click", async (e) => {
-  e.preventDefault();
-  const name = document.getElementById("neueReiseName").value;
-  const start = document.getElementById("neueReiseStart").value;
-  const end = document.getElementById("neueReiseEnde").value;
 
-  if (!name || !start || !end) {
-    alert("Bitte alle Felder ausfüllen!");
-    return;
-  }
+  // Neue Reise erstellen
+  document.getElementById("neueReiseButton").addEventListener("click", (e) => {
+    e.preventDefault();
+    const name = document.getElementById("neueReiseName").value;
+    const start = document.getElementById("neueReiseStart").value;
+    const end = document.getElementById("neueReiseEnde").value;
 
-  const neueReise = {
-    name,
-    start,
-    end,
-    ort: "Unbekannt",
-    beschreibung: "Neue Reise",
-    punkte: []
-  };
-
-  reisen.push(neueReise);
-  localStorage.setItem("reisen", JSON.stringify(reisen));
-  populateReiseSelect();
-  alert("Reise erfolgreich erstellt!");
-
-  // Aktualisiere reisen.json
-  try {
-    const response = await fetch("reisen.json", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ reisen })
-    });
-
-    if (!response.ok) {
-      throw new Error("Fehler beim Speichern von reisen.json");
+    if (!name || !start || !end) {
+      alert("Bitte alle Felder ausfüllen!");
+      return;
     }
-    console.log("reisen.json erfolgreich aktualisiert");
-  } catch (e) {
-    console.error("Fehler beim Speichern von reisen.json:", e);
-    alert("Fehler beim Speichern der Reise. Bitte manuell aktualisieren.");
-  }
 
-  document.getElementById("neueReiseName").value = "";
-  document.getElementById("neueReiseStart").value = "";
-  document.getElementById("neueReiseEnde").value = "";
-});
+    const neueReise = {
+      name,
+      start,
+      end,
+      ort: "Unbekannt",
+      beschreibung: "Neue Reise",
+      punkte: []
+    };
+
+    reisen.push(neueReise);
+    localStorage.setItem("reisen", JSON.stringify(reisen));
+    populateReiseSelect();
+    alert("Reise erfolgreich erstellt!");
+
+    document.getElementById("neueReiseName").value = "";
+    document.getElementById("neueReiseStart").value = "";
+    document.getElementById("neueReiseEnde").value = "";
+  });
 
   // Formular-Submit
-  document.getElementById("logForm").addEventListener("submit", (e) => {
+  logForm.addEventListener("submit", (e) => {
     e.preventDefault();
-
     const date = document.getElementById("date").value;
     const title = document.getElementById("title").value;
     const location = document.getElementById("location").value;
     const lat = document.getElementById("lat").value;
     const lon = document.getElementById("lon").value;
     const text = document.getElementById("text").value;
-    const photoInput = document.getElementById("photo");
-    const photoFile = photoInput.files[0];
+    const photoFile = document.getElementById("photo").files[0];
 
-    // Erstelle Bericht
     const logEntry = {
       date,
       title,
@@ -112,18 +101,17 @@ document.getElementById("neueReiseButton").addEventListener("click", async (e) =
       photo: photoFile ? photoFile.name : null
     };
 
-    // Speichere lokal
     saveLogLocally(logEntry);
-
-    // Rückmeldung
     alert("Eintrag erfolgreich gespeichert!");
-
-    // Leere Formular
-    document.getElementById("logForm").reset();
+    logForm.reset();
   });
 
-  // Lade Einträge
-  renderEntries();
+  // Karte initialisieren
+  const mapElement = document.getElementById("map");
+  map = L.map(mapElement).setView([51.505, -0.09], 13);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap"
+  }).addTo(map);
 
   // Reise-Auswahl
   reiseSelect.addEventListener("change", () => {
@@ -136,9 +124,12 @@ document.getElementById("neueReiseButton").addEventListener("click", async (e) =
       }
     } else {
       document.getElementById("reiseInfo").innerHTML = "<p>Keine Reise ausgewählt.</p>";
-      if (map) map.setView([51.505, -0.09], 13);
+      map.setView([51.505, -0.09], 13);
     }
   });
+
+  // Lade Einträge
+  renderEntries();
 });
 
 // Fülle Reise-Auswahl
@@ -153,35 +144,43 @@ function populateReiseSelect() {
   });
 }
 
-// Zeige den „Neue Reise“-Button erst nach Login
-const neueReiseButtonContainer = document.getElementById("neueReiseButtonContainer");
-const loginScreen = document.getElementById("loginScreen");
-const mainScreen = document.getElementById("mainScreen");
+// Zeige Reise-Info
+function showReiseInfo(reise) {
+  const infoDiv = document.getElementById("reiseInfo");
+  const start = new Date(reise.start).toLocaleDateString("de-DE");
+  const end = new Date(reise.end).toLocaleDateString("de-DE");
+  const days = Math.ceil((new Date(reise.end) - new Date(reise.start)) / (1000 * 60 * 60 * 24));
 
-// Wenn du eingeloggt bist → zeige den Button
-if (localStorage.getItem("isLoggedIn") === "true") {
-  neueReiseButtonContainer.style.display = "block";
-} else {
-  neueReiseButtonContainer.style.display = "none";
+  infoDiv.innerHTML = `
+    <h3>${reise.name}</h3>
+    <p><strong>Start:</strong> ${start}</p>
+    <p><strong>Ende:</strong> ${end}</p>
+    <p><strong>Dauer:</strong> ${days} Tage</p>
+    <p><strong>Ort:</strong> ${reise.ort}</p>
+    <p><strong>Beschreibung:</strong> ${reise.beschreibung}</p>
+  `;
 }
 
-// Wenn du eingeloggt bist → zeige den Button
-loginForm.addEventListener("submit", (e) => {
-  e.preventDefault();
-  const password = document.getElementById("password").value;
+// Zeige Reise-Route
+function showReiseRoute(reise) {
+  // Lösche alte Layer
+  map.eachLayer(layer => {
+    if (layer instanceof L.Polyline || layer instanceof L.Marker) {
+      map.removeLayer(layer);
+    }
+  });
 
-  if (password === correctPassword) {
-    loginScreen.style.display = "none";
-    mainScreen.style.display = "block";
-    error.style.display = "none";
-    localStorage.setItem("isLoggedIn", "true");
-    neueReiseButtonContainer.style.display = "block"; // ✅ Zeige Button
-    alert("Willkommen im Abenteuer-Logbuch!");
-  } else {
-    error.style.display = "block";
-    document.getElementById("password").value = "";
-  }
-});
+  // Zeige Linien
+  const points = reise.punkte.map(p => [p.lat, p.lon]);
+  L.polyline(points, { color: "blue", weight: 3 }).addTo(map);
+
+  // Zeige Marker
+  const bounds = L.latLngBounds();
+  reise.punkte.forEach(p => {
+    L.marker([p.lat, p.lon]).addTo(map)
+      .bindPopup(`<b>${p.ort}</b><br>${p.datum}`);
+    bounds.extend([p.lat, p.lon]);
+  });
 
   // Zoom auf Route
   map.fitBounds(bounds);
