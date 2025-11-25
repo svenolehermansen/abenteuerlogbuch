@@ -9,7 +9,18 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
-  <div class="container">
+  <div class="container" id="loginScreen">
+    <h1>🔐 Abenteuer-Logbuch</h1>
+    <p>Bitte gib das Passwort ein, um die Seite zu öffnen.</p>
+    <form id="loginForm">
+      <input type="password" id="password" placeholder="Passwort" required />
+      <button type="submit">Einloggen</button>
+    </form>
+    <p id="error" style="color: red; display: none;">Falsches Passwort!</p>
+  </div>
+
+  <div class="container" id="mainScreen" style="display: none;">
+    <!-- Hier kommt dein ursprünglicher Inhalt -->
     <h1>📝 Abenteuer-Logbuch</h1>
     <p>Teile deine Erlebnisse mit der Familie – jederzeit, überall.</p>
 
