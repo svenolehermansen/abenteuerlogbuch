@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   if (isLoggedIn === "true") {
     loginScreen.style.display = "none";
     mainScreen.style.display = "block";
-    neueReiseForm.style.display = "block"; // ✅ Zeige Formular
+    neueReiseForm.style.display = "block";
   }
 
   // Lade Reisen
@@ -48,7 +48,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       loginScreen.style.display = "none";
       mainScreen.style.display = "block";
       error.style.display = "none";
-      localStorage.setItem("isLoggedIn", "true");
+      localStorage.setItem("isLoggedIn", "true"); // ✅ Sicher speichern
       neueReiseForm.style.display = "block"; // ✅ Zeige Formular
       alert("Willkommen im Abenteuer-Logbuch!");
     } else {
@@ -104,7 +104,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 });
-
 // Fülle Reise-Auswahl
 function populateReiseSelect() {
   const select = document.getElementById("reise");
