@@ -51,36 +51,55 @@ document.addEventListener("DOMContentLoaded", async () => {
       document.getElementById("password").value = "";
     }
   });
+// Neue Reise erstellen
+document.getElementById("neueReiseButton").addEventListener("click", async (e) => {
+  e.preventDefault();
+  const name = document.getElementById("neueReiseName").value;
+  const start = document.getElementById("neueReiseStart").value;
+  const end = document.getElementById("neueReiseEnde").value;
 
-  // Neue Reise erstellen
-  document.getElementById("neueReiseButton").addEventListener("click", (e) => {
-    e.preventDefault();
-    const name = document.getElementById("neueReiseName").value;
-    const start = document.getElementById("neueReiseStart").value;
-    const end = document.getElementById("neueReiseEnde").value;
+  if (!name || !start || !end) {
+    alert("Bitte alle Felder ausfüllen!");
+    return;
+  }
 
-    if (!name || !start || !end) {
-      alert("Bitte alle Felder ausfüllen!");
-      return;
+  const neueReise = {
+    name,
+    start,
+    end,
+    ort: "Unbekannt",
+    beschreibung: "Neue Reise",
+    punkte: []
+  };
+
+  reisen.push(neueReise);
+  localStorage.setItem("reisen", JSON.stringify(reisen));
+  populateReiseSelect();
+  alert("Reise erfolgreich erstellt!");
+
+  // Aktualisiere reisen.json
+  try {
+    const response = await fetch("reisen.json", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ reisen })
+    });
+
+    if (!response.ok) {
+      throw new Error("Fehler beim Speichern von reisen.json");
     }
+    console.log("reisen.json erfolgreich aktualisiert");
+  } catch (e) {
+    console.error("Fehler beim Speichern von reisen.json:", e);
+    alert("Fehler beim Speichern der Reise. Bitte manuell aktualisieren.");
+  }
 
-    const neueReise = {
-      name,
-      start,
-      end,
-      ort: "Unbekannt",
-      beschreibung: "Neue Reise",
-      punkte: []
-    };
-
-    reisen.push(neueReise);
-    localStorage.setItem("reisen", JSON.stringify(reisen));
-    populateReiseSelect();
-    alert("Reise erfolgreich erstellt!");
-    document.getElementById("neueReiseName").value = "";
-    document.getElementById("neueReiseStart").value = "";
-    document.getElementById("neueReiseEnde").value = "";
-  });
+  document.getElementById("neueReiseName").value = "";
+  document.getElementById("neueReiseStart").value = "";
+  document.getElementById("neueReiseEnde").value = "";
+});
 
   // Formular-Submit
   document.getElementById("logForm").addEventListener("submit", (e) => {
