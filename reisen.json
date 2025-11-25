@@ -1,0 +1,37 @@
+{
+  "reisen": [
+    {
+      "name": "Bodensee-Route 2025",
+      "start": "2025-04-01",
+      "end": "2025-04-12",
+      "ort": "Bodensee, Deutschland",
+      "beschreibung": "Eine entspannte Reise am Bodensee mit vielen Naturerlebnissen.",
+      "punkte": [
+        {
+          "datum": "2025-04-01",
+          "ort": "Friedrichshafen",
+          "lat": 47.6486,
+          "lon": 9.5056
+        },
+        {
+          "datum": "2025-04-03",
+          "ort": "Konstanz",
+          "lat": 47.6678,
+          "lon": 9.1778
+        },
+        {
+          "datum": "2025-04-06",
+          "ort": "Lindau",
+          "lat": 47.5458,
+          "lon": 9.9622
+        },
+        {
+          "datum": "2025-04-09",
+          "ort": "Meersburg",
+          "lat": 47.6783,
+          "lon": 8.9547
+        }
+      ]
+    }
+  ]
+}
