@@ -1,103 +1,67 @@
-<!DOCTYPE html>
-<html lang="de">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Abenteuer-Logbuch</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-</head>
-<body>
-  <!-- Login-Bildschirm -->
-  <div class="container" id="loginScreen">
-    <h1>🔐 Abenteuer-Logbuch</h1>
-    <p>Bitte gib das Passwort ein, um die Seite zu öffnen.</p>
-    <form id="loginForm">
-      <input type="password" id="password" placeholder="Passwort" required />
-      <button type="submit">Einloggen</button>
-    </form>
-    <p id="error" style="color: red; display: none;">Falsches Passwort!</p>
+<h1>📝 Abenteuer-Logbuch</h1>
+
+<!-- Auswahl aktuelle Reise -->
+- Aktuelle Reise:
+<div class="form-group inline">
+  <select id="reise">
+    <option value="">Keine Reise ausgewählt</option>
+  </select>
+  <select id="routeType">
+    <option value="hin">Hin</option>
+    <option value="zurück">Zurück</option>
+  </select>
+</div>
+
+<!-- Formular: Eintrag -->
+<form id="logForm">
+  <div class="form-group">
+    <label for="date">Datum</label>
+    <input type="date" id="date" required />
   </div>
 
-  <!-- Hauptbildschirm (nur nach Login sichtbar) -->
-  <div class="container" id="mainScreen" style="display: none;">
-    <!-- Button: Neue Reise (nur sichtbar nach Login) -->
-    <div class="new-reise-button" id="neueReiseButtonContainer">
-      <button id="neueReiseButton">➕ Neue Reise hinzufügen</button>
-    </div>
-
-    <!-- Reise-Auswahl -->
-    <div class="form-group">
-      <label for="reise">Aktuelle Reise:</label>
-      <select id="reise">
-        <option value="">Keine Reise ausgewählt</option>
-      </select>
-    </div>
-
-    <!-- Reise-Route (Hin / Zurück) -->
-    <div class="form-group">
-      <label for="routeType">Route:</label>
-      <select id="routeType">
-        <option value="hin">Hin</option>
-        <option value="zurück">Zurück</option>
-      </select>
-    </div>
-
-    <!-- Formular -->
-    <form id="logForm">
-      <div class="form-group">
-        <label for="date">Datum:</label>
-        <input type="date" id="date" required />
-      </div>
-
-      <div class="form-group">
-        <label for="title">Titel:</label>
-        <input type="text" id="title" placeholder="z. B. 'Heute war ein toller Tag am See'" required />
-      </div>
-
-      <div class="form-group">
-        <label for="location">Ort:</label>
-        <input type="text" id="location" placeholder="z. B. Bodensee, Deutschland" required />
-      </div>
-
-      <div class="form-group">
-        <label for="lat">Latitude (optional):</label>
-        <input type="text" id="lat" placeholder="z. B. 47.3769" />
-      </div>
-
-      <div class="form-group">
-        <label for="lon">Longitude (optional):</label>
-        <input type="text" id="lon" placeholder="z. B. 8.5417" />
-      </div>
-
-      <div class="form-group">
-        <label for="text">Bericht:</label>
-        <textarea id="text" rows="5" placeholder="Was war heute besonders?" required></textarea>
-      </div>
-
-      <div class="form-group">
-        <label for="photo">Foto hochladen:</label>
-        <input type="file" id="photo" accept="image/*" />
-      </div>
-
-      <button type="submit">Eintrag speichern & hochladen</button>
-    </form>
-
-    <!-- Karte -->
-    <div id="map" style="height: 300px; margin-top: 20px;"></div>
-
-    <!-- Reise-Übersicht -->
-    <h2>📅 Reise-Übersicht</h2>
-    <div id="reiseInfo">
-      <p>Keine Reise ausgewählt.</p>
-    </div>
-
-    <!-- Berichte (Titel über dem Bericht) -->
-    <h2>📅 Letzte Einträge</h2>
-    <div id="entries"></div>
+  <div class="form-group">
+    <label for="title">Titel</label>
+    <input type="text" id="title" placeholder="z. B. 'Sonnenuntergang am See'" required />
   </div>
 
-  <script src="script.js"></script>
-</body>
-</html>
+  <div class="form-group">
+    <label for="location">Ort</label>
+    <input type="text" id="location" placeholder="z. B. Bodensee, Deutschland" required />
+  </div>
+
+  <div class="form-group two-col">
+    <div>
+      <label for="lat">Latitude (optional)</label>
+      <input type="text" id="lat" placeholder="z. B. 47.3769" />
+    </div>
+    <div>
+      <label for="lon">Longitude (optional)</label>
+      <input type="text" id="lon" placeholder="z. B. 8.5417" />
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="text">Bericht</label>
+    <textarea id="text" rows="5" placeholder="Was war heute besonders?" required></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="photo">Foto hochladen (optional)</label>
+    <input type="file" id="photo" accept="image/*" />
+  </div>
+
+  <button type="submit">Eintrag speichern</button>
+</form>
+
+<!-- Karte -->
+<div id="map"></div>
+
+<!-- Reise-Info -->
+<h2>📅 Reise-Übersicht</h2>
+<div id="reiseInfo">
+  <p>Keine Reise ausgewählt.</p>
+</div>
+
+<!-- Einträge -->
+<h2>📚 Letzte Einträge</h2>
+<div id="entries"></div>
