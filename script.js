@@ -183,34 +183,33 @@ function showReiseInfo(reise) {
   `;
 }
 
-// Zeige Reise-Route
-function showReiseRoute(reise) {
-  // Wenn Karte noch nicht existiert → erstelle sie
-  if (!map) {
-    map = L.map("map").setView([51.505, -0.09], 13);
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "© OpenStreetMap"
-    }).addTo(map);
+// Zeige den „Neue Reise“-Button erst nach Login
+const neueReiseButtonContainer = document.getElementById("neueReiseButtonContainer");
+const loginScreen = document.getElementById("loginScreen");
+const mainScreen = document.getElementById("mainScreen");
+
+// Wenn du eingeloggt bist → zeige den Button
+if (localStorage.getItem("isLoggedIn") === "true") {
+  neueReiseButtonContainer.style.display = "block";
+}
+
+// Wenn du eingeloggt bist → zeige den Button
+loginForm.addEventListener("submit", (e) => {
+  e.preventDefault();
+  const password = document.getElementById("password").value;
+
+  if (password === correctPassword) {
+    loginScreen.style.display = "none";
+    mainScreen.style.display = "block";
+    error.style.display = "none";
+    localStorage.setItem("isLoggedIn", "true");
+    neueReiseButtonContainer.style.display = "block"; // ✅ Zeige Button
+    alert("Willkommen im Abenteuer-Logbuch!");
+  } else {
+    error.style.display = "block";
+    document.getElementById("password").value = "";
   }
-
-  // Lösche alte Layer
-  map.eachLayer(layer => {
-    if (layer instanceof L.Polyline || layer instanceof L.Marker) {
-      map.removeLayer(layer);
-    }
-  });
-
-  // Zeige Linien
-  const points = reise.punkte.map(p => [p.lat, p.lon]);
-  L.polyline(points, { color: "blue", weight: 3 }).addTo(map);
-
-  // Zeige Marker
-  const bounds = L.latLngBounds();
-  reise.punkte.forEach(p => {
-    L.marker([p.lat, p.lon]).addTo(map)
-      .bindPopup(`<b>${p.ort}</b><br>${p.datum}`);
-    bounds.extend([p.lat, p.lon]);
-  });
+});
 
   // Zoom auf Route
   map.fitBounds(bounds);
