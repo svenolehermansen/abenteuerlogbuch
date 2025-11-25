@@ -1,6 +1,3 @@
-// Globale Variablen
-const correctPassword = "FamilienGeheimnis2025"; // ← ÄNDERE DIES! (z. B. "Abenteuer2025")
-
 // Reise-Objekt
 let reisen = [];
 
