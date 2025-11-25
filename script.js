@@ -1,70 +1,45 @@
 // Globale Variablen
-const clientId = "DEINE_CLIENT_ID"; // ← Ersetze das später!
-const redirectUri = "https://deinefamilie.github.io/abenteuerlogbuch"; // ← Deine GitHub Pages URL
+const clientId = "DEINE_CLIENT_ID"; // ← Ersetze später!
+const redirectUri = "https://deinefamilie.github.io/abenteuerlogbuch";
 let accessToken = null;
+
+// Passwort (ÄNDERE DAS!)
+const correctPassword = "FamilienGeheimnis2025"; // ← ÄNDERE DIES! (z. B. "Abenteuer2025")
 
 // Initialisierung
 document.addEventListener("DOMContentLoaded", () => {
-  const form = document.getElementById("logForm");
-  const entriesDiv = document.getElementById("entries");
-  const map = L.map("map").setView([51.505, -0.09], 13);
+  const loginScreen = document.getElementById("loginScreen");
+  const mainScreen = document.getElementById("mainScreen");
+  const loginForm = document.getElementById("loginForm");
+  const error = document.getElementById("error");
 
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "© OpenStreetMap"
-  }).addTo(map);
-
-  // Formular-Submit
-  form.addEventListener("submit", async (e) => {
+  // Passwort-Formular
+  loginForm.addEventListener("submit", (e) => {
     e.preventDefault();
+    const password = document.getElementById("password").value;
 
-    const date = document.getElementById("date").value;
-    const location = document.getElementById("location").value;
-    const lat = document.getElementById("lat").value;
-    const lon = document.getElementById("lon").value;
-    const text = document.getElementById("text").value;
-    const photoInput = document.getElementById("photo");
-    const photoFile = photoInput.files[0];
-
-    // Erstelle Bericht
-    const logEntry = {
-      date,
-      location,
-      lat: lat || null,
-      lon: lon || null,
-      text,
-      photo: photoFile ? photoFile.name : null
-    };
-
-    // Speichere lokal
-    await saveLogLocally(logEntry);
-
-    // Lade Foto hoch (falls vorhanden)
-    let photoUrl = null;
-    if (photoFile) {
-      photoUrl = await uploadPhotoToOneDrive(photoFile, date);
+    if (password === correctPassword) {
+      loginScreen.style.display = "none";
+      mainScreen.style.display = "block";
+      error.style.display = "none";
+      alert("Willkommen im Abenteuer-Logbuch!");
+    } else {
+      error.style.display = "block";
+      document.getElementById("password").value = "";
     }
-
-    // Aktualisiere Karte
-    if (lat && lon) {
-      map.setView([parseFloat(lat), parseFloat(lon)], 15);
-      L.marker([parseFloat(lat), parseFloat(lon)]).addTo(map)
-        .bindPopup(`<b>${location}</b><br>${text}`);
-    }
-
-    // Aktualisiere Übersicht
-    renderEntries();
-
-    alert("Eintrag erfolgreich gespeichert und hochgeladen!");
   });
 
   // Lade Einträge
   renderEntries();
 
   // Karte initialisieren
-  map.setView([51.505, -0.09], 13);
+  const map = L.map("map").setView([51.505, -0.09], 13);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap"
+  }).addTo(map);
 });
 
-// Speichere lokal (in localStorage)
+// Speichere lokal
 async function saveLogLocally(entry) {
   const logs = JSON.parse(localStorage.getItem("logs") || "[]");
   logs.push(entry);
