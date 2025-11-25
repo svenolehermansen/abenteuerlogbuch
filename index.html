@@ -18,25 +18,25 @@
     </form>
     <p id="error" style="color: red; display: none;">Falsches Passwort!</p>
   </div>
-  
-  <!-- Neues Reise-Formular (nur sichtbar nach Login) -->
-  <div class="form-group" style="margin-top: 20px; display: none;" id="neueReiseForm">
-    <h3>🆕 Neue Reise erstellen</h3>
-    <input type="text" id="neueReiseName" placeholder="Name der Reise (z. B. Alpen-Route 2026)" />
-    <input type="date" id="neueReiseStart" placeholder="Startdatum" />
-    <input type="date" id="neueReiseEnde" placeholder="Enddatum" />
-    <button id="neueReiseButton">Reise speichern</button>
-  </div>
-    
+
   <div class="container" id="mainScreen" style="display: none;">
     <h1>📝 Abenteuer-Logbuch</h1>
     <p>Teile deine Erlebnisse mit der Familie – jederzeit, überall.</p>
 
-    <!-- Reise-Auswahl -->
+    <!-- Reise-Auswahl (Dropdown) -->
     <div class="form-group">
       <label for="reise">Aktuelle Reise:</label>
       <select id="reise">
         <option value="">Keine Reise ausgewählt</option>
+      </select>
+    </div>
+
+    <!-- Reise-Route (Hin / Zurück) -->
+    <div class="form-group">
+      <label for="routeType">Route:</label>
+      <select id="routeType">
+        <option value="hin">Hin</option>
+        <option value="zurück">Zurück</option>
       </select>
     </div>
 
@@ -45,6 +45,11 @@
       <div class="form-group">
         <label for="date">Datum:</label>
         <input type="date" id="date" required />
+      </div>
+
+      <div class="form-group">
+        <label for="title">Titel:</label>
+        <input type="text" id="title" placeholder="z. B. 'Heute war ein toller Tag am See'" required />
       </div>
 
       <div class="form-group">
@@ -83,12 +88,7 @@
     <div id="reiseInfo">
       <p>Keine Reise ausgewählt.</p>
     </div>
-    
-    <div class="form-group">
-      <label for="title">Titel:</label>
-      <input type="text" id="title" placeholder="z. B. 'Heute war ein toller Tag am See'" required />
-    </div>
-    
+
     <!-- Berichte -->
     <h2>📅 Letzte Einträge</h2>
     <div id="entries"></div>
