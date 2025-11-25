@@ -19,12 +19,14 @@ document.addEventListener("DOMContentLoaded", async () => {
   const loginForm = document.getElementById("loginForm");
   const error = document.getElementById("error");
   const reiseSelect = document.getElementById("reise");
+  const neueReiseForm = document.getElementById("neueReiseForm");
 
   // Prüfe, ob bereits eingeloggt
   const isLoggedIn = localStorage.getItem("isLoggedIn");
   if (isLoggedIn === "true") {
     loginScreen.style.display = "none";
     mainScreen.style.display = "block";
+    neueReiseForm.style.display = "block"; // ✅ Zeige Formular
   }
 
   // Lade Reisen
@@ -47,6 +49,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       mainScreen.style.display = "block";
       error.style.display = "none";
       localStorage.setItem("isLoggedIn", "true");
+      neueReiseForm.style.display = "block"; // ✅ Zeige Formular
       alert("Willkommen im Abenteuer-Logbuch!");
     } else {
       error.style.display = "block";
