@@ -9,6 +9,7 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 </head>
 <body>
+  <!-- Login-Bildschirm -->
   <div class="container" id="loginScreen">
     <h1>🔐 Abenteuer-Logbuch</h1>
     <p>Bitte gib das Passwort ein, um die Seite zu öffnen.</p>
@@ -19,13 +20,14 @@
     <p id="error" style="color: red; display: none;">Falsches Passwort!</p>
   </div>
 
+  <!-- Hauptbildschirm (nur nach Login sichtbar) -->
   <div class="container" id="mainScreen" style="display: none;">
     <!-- Button: Neue Reise (nur sichtbar nach Login) -->
-  <div class="new-reise-button" id="neueReiseButtonContainer">
-    <button id="neueReiseButton">➕ Neue Reise hinzufügen</button>
-  </div>
-    
-    <!-- Reise-Auswahl (Dropdown) -->
+    <div class="new-reise-button" id="neueReiseButtonContainer">
+      <button id="neueReiseButton">➕ Neue Reise hinzufügen</button>
+    </div>
+
+    <!-- Reise-Auswahl -->
     <div class="form-group">
       <label for="reise">Aktuelle Reise:</label>
       <select id="reise">
@@ -91,7 +93,7 @@
       <p>Keine Reise ausgewählt.</p>
     </div>
 
-    <!-- Berichte -->
+    <!-- Berichte (Titel über dem Bericht) -->
     <h2>📅 Letzte Einträge</h2>
     <div id="entries"></div>
   </div>
