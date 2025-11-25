@@ -6,7 +6,7 @@ let accessToken = null;
 // Passwort (ÄNDERE DAS!)
 const correctPassword = "FamilienGeheimnis2025"; // ← ÄNDERE DIES! (z. B. "Abenteuer2025")
 
-// Initialisierung
+// Initialisierung – nur nach Laden des DOM
 document.addEventListener("DOMContentLoaded", () => {
   const loginScreen = document.getElementById("loginScreen");
   const mainScreen = document.getElementById("mainScreen");
