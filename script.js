@@ -4,7 +4,7 @@ const redirectUri = "https://deinefamilie.github.io/abenteuerlogbuch";
 let accessToken = null;
 
 // Passwort (ÄNDERE DAS!)
-const correctPassword = "FamilienGeheimnis2025"; // ← ÄNDERE DIES!
+const correctPassword = "Nesnam73"; 
 
 // Reise-Objekt
 let reisen = [];
