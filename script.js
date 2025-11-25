@@ -143,3 +143,89 @@ function populateReiseSelect() {
     const option = document.createElement("option");
     option.value = reise.name;
     option.textContent = reise.name;
+    select.appendChild(option);
+  });
+}
+
+// Zeige Reise-Info
+function showReiseInfo(reise) {
+  const infoDiv = document.getElementById("reiseInfo");
+  const start = new Date(reise.start).toLocaleDateString("de-DE");
+  const end = new Date(reise.end).toLocaleDateString("de-DE");
+  const days = Math.ceil((new Date(reise.end) - new Date(reise.start)) / (1000 * 60 * 60 * 24));
+
+  infoDiv.innerHTML = `
+    <h3>${reise.name}</h3>
+    <p><strong>Start:</strong> ${start}</p>
+    <p><strong>Ende:</strong> ${end}</p>
+    <p><strong>Dauer:</strong> ${days} Tage</p>
+    <p><strong>Ort:</strong> ${reise.ort}</p>
+    <p><strong>Beschreibung:</strong> ${reise.beschreibung}</p>
+  `;
+}
+
+// Zeige Reise-Route
+function showReiseRoute(reise) {
+  // Wenn Karte noch nicht existiert → erstelle sie
+  if (!map) {
+    map = L.map("map").setView([51.505, -0.09], 13);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "© OpenStreetMap"
+    }).addTo(map);
+  }
+
+  // Lösche alte Layer
+  map.eachLayer(layer => {
+    if (layer instanceof L.Polyline || layer instanceof L.Marker) {
+      map.removeLayer(layer);
+    }
+  });
+
+  // Zeige Linien
+  const points = reise.punkte.map(p => [p.lat, p.lon]);
+  L.polyline(points, { color: "blue", weight: 3 }).addTo(map);
+
+  // Zeige Marker
+  const bounds = L.latLngBounds();
+  reise.punkte.forEach(p => {
+    L.marker([p.lat, p.lon]).addTo(map)
+      .bindPopup(`<b>${p.ort}</b><br>${p.datum}`);
+    bounds.extend([p.lat, p.lon]);
+  });
+
+  // Zoom auf Route
+  map.fitBounds(bounds);
+}
+
+// Speichere lokal
+function saveLogLocally(entry) {
+  const logs = JSON.parse(localStorage.getItem("logs") || "[]");
+  logs.push(entry);
+  localStorage.setItem("logs", JSON.stringify(logs));
+}
+
+// Rendere Einträge
+function renderEntries() {
+  const entriesDiv = document.getElementById("entries");
+  const logs = JSON.parse(localStorage.getItem("logs") || "[]");
+
+  entriesDiv.innerHTML = "";
+
+  logs.slice().reverse().forEach(entry => {
+    const div = document.createElement("div");
+    div.className = "entry";
+
+    let locationText = entry.location;
+    if (entry.lat && entry.lon) {
+      locationText += ` (${entry.lat}, ${entry.lon})`;
+    }
+
+    div.innerHTML = `
+      <h3>${entry.date} – ${entry.title}</h3>
+      <p>${entry.text}</p>
+      ${entry.photo ? `<img src="https://github.com/deinefamilie/abenteuerlogbuch/blob/main/photos/${entry.photo}?raw=true" alt="Foto" />` : ''}
+      <div class="location">${locationText}</div>
+    `;
+    entriesDiv.appendChild(div);
+  });
+}
